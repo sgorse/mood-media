@@ -8,7 +8,7 @@
     "build": "webpack",
     "dev": "webpack-dev-server --content-base public/ --history-api-fallback"
   },
-  "author": "Simon Lu",
+  "author": "Shirdon Gorse",
   "license": "ISC",
   "devDependencies": {
     "autoprefixer": "^6.7.7",

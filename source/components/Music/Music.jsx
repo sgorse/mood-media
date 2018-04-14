@@ -5,6 +5,7 @@ import _ from 'lodash'
 import styles from './Music.scss'
 import Spotify from 'spotify-web-api-js'
 import SpotifyPlayer from 'react-spotify-player';
+var axios = require('axios');
 
 const spotifyWebApi = new Spotify();
 // size may also be a plain string using the presets 'large' or 'compact'
@@ -24,10 +25,17 @@ class Music extends Component {
         loggedIn: localStorage.getItem("access_token") || false,
         chosenGenre: 'rap',
         chosenMood: 'happy',
-        tracks: null
+        tracks: null,
+        customers: [] // Should be removed, just for testing server
       }
       spotifyWebApi.setAccessToken(localStorage.getItem("access_token"))
 
+    }
+
+    componentDidMount() {
+      let url = 'http://localhost:5000/api/customers'
+      let res = axios.get(url)
+      console.log(res)
     }
 
     getTracks(genre) {
