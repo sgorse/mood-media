@@ -1,0 +1,23 @@
+
+.Music {
+  text-align: center;
+  #musicTitle {
+    color: white;
+    padding-top: 3%;
+    padding-bottom: 0.25%;
+  }
+  .searchElement {
+    display:inline-block;
+    margin-bottom: 10px;
+    margin-left: 1%;
+    width:200px;
+  }
+  .breaker{
+    clear:both;
+  }
+}
+
+.spotifyPlayer {
+  border: solid;
+  border-width: 3px;
+}
