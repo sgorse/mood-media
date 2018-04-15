@@ -33,22 +33,30 @@ class Music extends Component {
     }
 
     componentDidMount() {
-      let url = 'http://localhost:5000/api/customers'
-      let res = axios.get(url)
-      console.log(res)
+      // let url = 'http://localhost:5000/api/customers'
+      // let res = axios.get(url)
+      // console.log(res)
     }
 
     getTracks(genre) {
 
       let currentComponent = this // Not sure why this is needed
+      // spotifyWebApi.searchTracks('genre:'+this.state.chosenGenre)
+      // .then(function(data) {
+      //   currentComponent.setState({
+      //       tracks: data.tracks.items,
+      //   })
+      // }, function(err) {
+      //   console.error(err);
+      // });
+      let url = 'http://localhost:5000/'
       spotifyWebApi.searchTracks('genre:'+this.state.chosenGenre)
-      .then(function(data) {
-        currentComponent.setState({
-            tracks: data.tracks.items,
-        })
+      .then(data => axios.post(url, JSON.stringify({tracks: data.tracks.items, mood: currentComponent.state.chosenMood})))
+      .then(function(res) {
+        console.log(res)
       }, function(err) {
         console.error(err);
-      });
+      })
     }
     render() {
         if (!this.state.loggedIn) {
