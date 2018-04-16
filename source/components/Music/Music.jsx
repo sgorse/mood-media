@@ -25,33 +25,10 @@ class Music extends Component {
         loggedIn: localStorage.getItem("access_token") || false,
         chosenGenre: 'rap',
         chosenMood: 'happy',
-        tracks: null,
-        customers: [] // Should be removed, just for testing server
+        tracks: null
       }
       spotifyWebApi.setAccessToken(localStorage.getItem("access_token"))
 
-    }
-
-    parseTracks(obj) {
-      let resObj = []
-      for(track in obj) {
-        let parsedObj = {}
-        songObj = obj[track]
-        parsedObj['name'] = songObj.name
-        parsedObj['artists'] = []
-        // Get a list all of the artists for the song
-        for(var artist in songObj.artists) {
-          parsedObj['artists'].push(songObj.artists[artist].name)
-        }
-        resObj.push(parsedObj)
-      }
-      return resObj
-    }
-
-    parseSpotifyCall(data) {
-      console.log(typeof(data))
-      console.log(data)
-      return data
     }
 
     getTracks(genre) {
@@ -69,13 +46,15 @@ class Music extends Component {
     }
 
     render() {
+        // If not logged in, show the login button
         if (!this.state.loggedIn) {
           return (
-            <a href="http://localhost:8888/">
-              <Button>Login to Spotify to use the app</Button>
+            <a href="http://localhost:8888/" >
+              <Button id="spotifyLoginButton">Login to Spotify to use the app</Button>
             </a>
           )
         }
+        // Create a SpotifyPlayer object for each track
         let tracks = _.map(this.state.tracks, (track) => {
           if(track != null) {
               return (

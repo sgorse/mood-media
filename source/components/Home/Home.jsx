@@ -16,7 +16,6 @@ class Home extends Component {
       nowPlaying: {
         name: 'Not Checked',
         image: ''
-
       }
     }
     if(params.access_token) {
@@ -37,17 +36,6 @@ class Home extends Component {
     }
     return hashParams;
   }
-  getNowPlaying() {
-    spotifyWebApi.getMyCurrentPlaybackState().
-      then((response) => {
-        this.setState({
-          nowPlaying: {
-            name: response.item.name,
-            image: response.item.album.images[0].url
-          }
-        })
-      })
-  }
   render() {
       return(
           <div className="Home">
@@ -56,13 +44,6 @@ class Home extends Component {
                 <Button id="musicButton" as={Link} to='music' onClick={() => {window.location.reload();}}>Music</Button>
                 <Button id="moviesButton" as={Link} to='movies' onClick={() => {window.location.reload();}}>Movies</Button>
             </div>
-            <div>Now Playing : {this.state.nowPlaying.name}</div>
-            <div>
-              <img src={ this.state.nowPlaying.image} style={{width: 100}}/>
-            </div>
-            <button onClick={() => this.getNowPlaying()} >
-              Check Now Playing
-            </button>
           </div>
       )
   }

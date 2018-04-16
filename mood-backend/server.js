@@ -57,10 +57,8 @@ function runPythonScript(songLyrics, mood) {
   options.args.push(mood)
   PythonShell.run('mood.py', options, function (err, results) {
   if (err) throw err;
-    //resBools.push(results[0])
   resBools = results;
   })
-  //console.log(resBools)
   return resBools
 }
 
