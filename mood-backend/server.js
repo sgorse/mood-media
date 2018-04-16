@@ -2,10 +2,21 @@ const express = require('express');
 const cors = require('cors')
 const app = express();
 var PythonShell = require('python-shell');
+var bodyParser = require('body-parser')
+var deasync = require('deasync');
+//import Spotify from 'spotify-web-api-js'
+
 
 // Needed to pass information from the web client to the backend
 app.use(cors())
 
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }))
+
+// parse application/json
+app.use(bodyParser.json())
+
+// Function used to parse the track objects received from the front end Spotify API call
 function parseTracks(obj) {
   let resObj = []
   for(track in obj) {
@@ -33,42 +44,53 @@ function getLyrics(tracks) {
   return resObj
 }
 
+function runPythonScript(songLyrics, mood) {
+  let resBools = []
+  var options = {
+    mode: 'text',
+    scriptPath: '/Users/shirdongorse/Documents/spring18/cs410/project/mood-media/mood-backend',
+    args: []
+  }
+  for(song in songLyrics) {
+    options.args.push(songLyrics[song])
+  }
+  options.args.push(mood)
+  PythonShell.run('mood.py', options, function (err, results) {
+  if (err) throw err;
+    //resBools.push(results[0])
+  resBools = results;
+  })
+  //console.log(resBools)
+  return resBools
+}
+
 // POST method route
 // Used to receive the track list from the front end
 app.post('/', function (req, res) {
   console.log("Received POST Request")
-  var resBools = []
-  var data = ''
-  req.on('data', function (chunk) {
-    data += chunk;
-  });
+  let mood = req.body.mood
+  let parsedTracks = parseTracks(req.body.tracks)
+  let songLyrics = getLyrics(parsedTracks)
 
-  req.on('end', function () {
-    console.log('POST data received');
-    let obj = JSON.parse(data).tracks
-    let mood = JSON.parse(data).mood
-    console.log(mood)
-    let parsedTracks = parseTracks(obj)
-    let songLyrics = getLyrics(parsedTracks)
-
-    for(var s in songLyrics) {
-      lyric = songLyrics[s]
-      var options = {
-        mode: 'text',
-        scriptPath: '/Users/shirdongorse/Documents/spring18/cs410/project/mood-media/mood-backend',
-        args: [lyric, mood]
-      }
-      PythonShell.run('mood.py', options, function (err, results) {
-      if (err) throw err;
-      // results is an array consisting of messages collected during execution
-      //console.log('results: %j', results[0]);
-      resBools.push(results[0])
-      });
+  var options = {
+    mode: 'text',
+    scriptPath: '/Users/shirdongorse/Documents/spring18/cs410/project/mood-media/mood-backend',
+    args: []
+  }
+  for(song in songLyrics) {
+    options.args.push(songLyrics[song])
+  }
+  options.args.push(mood)
+  PythonShell.run('mood.py', options, function (err, results) {
+  if (err) throw err;
+  resUris = []
+  for(index in req.body.tracks) {
+    if(results[index] == "True") {
+      resUris.push(req.body.tracks[index].uri)
     }
-    res.end();
-  });
-  console.log(resBools)
-  res.send({ status: 'SUCCESS', resBools: {resBools}})
+  }
+  res.send({ status: 'SUCCESS', uris: resUris})
+  })
 })
 
 const port = 5000;

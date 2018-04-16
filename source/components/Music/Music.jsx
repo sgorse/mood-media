@@ -32,32 +32,42 @@ class Music extends Component {
 
     }
 
-    componentDidMount() {
-      // let url = 'http://localhost:5000/api/customers'
-      // let res = axios.get(url)
-      // console.log(res)
+    parseTracks(obj) {
+      let resObj = []
+      for(track in obj) {
+        let parsedObj = {}
+        songObj = obj[track]
+        parsedObj['name'] = songObj.name
+        parsedObj['artists'] = []
+        // Get a list all of the artists for the song
+        for(var artist in songObj.artists) {
+          parsedObj['artists'].push(songObj.artists[artist].name)
+        }
+        resObj.push(parsedObj)
+      }
+      return resObj
+    }
+
+    parseSpotifyCall(data) {
+      console.log(typeof(data))
+      console.log(data)
+      return data
     }
 
     getTracks(genre) {
-
       let currentComponent = this // Not sure why this is needed
-      // spotifyWebApi.searchTracks('genre:'+this.state.chosenGenre)
-      // .then(function(data) {
-      //   currentComponent.setState({
-      //       tracks: data.tracks.items,
-      //   })
-      // }, function(err) {
-      //   console.error(err);
-      // });
       let url = 'http://localhost:5000/'
       spotifyWebApi.searchTracks('genre:'+this.state.chosenGenre)
-      .then(data => axios.post(url, JSON.stringify({tracks: data.tracks.items, mood: currentComponent.state.chosenMood})))
+      .then(data => axios.post(url, {tracks: data.tracks.items, mood: currentComponent.state.chosenMood}))
       .then(function(res) {
-        console.log(res)
+        currentComponent.setState({
+            tracks: res.data.uris,
+        })
       }, function(err) {
-        console.error(err);
+        console.error(err)
       })
     }
+
     render() {
         if (!this.state.loggedIn) {
           return (
@@ -73,7 +83,7 @@ class Music extends Component {
                   <div class="breaker"></div>
                   <SpotifyPlayer
                     className="spotifyPlayer"
-                    uri={track.uri}
+                    uri={track}
                     size={size}
                     view={view}
                     theme={theme}
