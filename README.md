@@ -1,9 +1,9 @@
 # CS 410 Project: Mood Music
 
-Steps to test the app locally:
-  Setup and run the authorization login script:
-    1. `cd auth-server`
-    2. `npm install`
+Steps to test the app locally:  
+  Setup and run the authorization login script:  
+    1. `cd auth-server`  
+    2. `npm install`
     2. `cd authorization_code`
     3. `node app.js`
   Setup and run the mood-media backend in a new terminal:
