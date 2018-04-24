@@ -8,6 +8,7 @@ var deasync = require('deasync');
 var Genius = require('genius-api');
 var cheerio = require('cheerio');
 var fetch = require("node-fetch");
+let globalLyrics = []
 
 //import Spotify from 'spotify-web-api-js'
 
@@ -40,45 +41,21 @@ function parseTracks(obj) {
   return resObj
 }
 
-// TODO :: Still not finished, need to integrate with Lina's code
-// Currently just returns a list of strings that don't contain the lyrics
+function getLyricsPromise(artist, track, genius) {
+  return genius.getArtistIdByName(artist)
+    .then(function(id) {
+        return genius.getSongsByArtist(id, track)
+    })
+}
+
 function getLyrics(tracks) {
   let resObj = []
-
-  for (let i = 0; i < tracks.length; i += 1) {
-    let temp_artist = tracks[i].artists[0]
-    let temp_track = tracks[i].name
-    
-    const genius = new Genius(accessToken)
-    genius.getArtistIdByName(temp_artist)
-      .then(function(id) {
-        genius.getSongsByArtist(id, temp_track)
-      })
-      .catch(function(error) {
-        console.error(error);
-      });  
-  }
-
-  /* let temp_url = "https://genius.com/Sia-chandelier-lyrics"
-  let temp_artist = "Sia"
-  let temp_track = "Chandelier" */
-
-  /* const genius = new Genius(accessToken)
-    genius.getArtistIdByName(temp_artist)
-      .then(function(id) {
-        genius.getSongsByArtist(id, temp_track)
-      })
-      .catch(function(error) {
-        console.error(error);
-      });  
-  */
-
-  // TODO: push lyrics of each songs to the resObj array
-  for(var t in tracks) {
-    resObj.push('')
-  }
-  // console.log(resObj)
-  return resObj
+  let promiseList = []
+  const genius = new Genius(accessToken)
+  tracks.forEach(function(listItem, index) {
+    promiseList.push(getLyricsPromise(listItem.artists[0], listItem.name, genius))
+  })
+  return promiseList
 }
 
 // Genius API does not have an artist entrypoint.
@@ -86,7 +63,6 @@ function getLyrics(tracks) {
 Genius.prototype.getArtistIdByName = function getArtistIdByName(artistName) {
   const normalizeName = name => name.replace(/\./g, '').toLowerCase()   // regex removes dots
   const artistNameNormalized = normalizeName(artistName)
-  console.log(artistNameNormalized)
 
   return this.search(artistName)
     .then((response) => {
@@ -103,32 +79,34 @@ Genius.prototype.getArtistIdByName = function getArtistIdByName(artistName) {
 
 Genius.prototype.getSongsByArtist = function getSongsByArtist(artistId, trackName) {
   const normalize = name => name.replace(/\./g, '').toLowerCase()   // regex removes dots
-  const trackNameNormalized = normalize(trackName)
-  // console.log(trackNameNormalized);
+  const trackNameNormalized = normalize(trackName).replace(/ *\([^)]*\) */g, "") // added regex to remove parentheses (eg. "(feat drake)")
 
   var urls_array = []
   const genius = new Genius(accessToken)
-  genius.songsByArtist(artistId, {
-    per_page: 50,
-    sort: 'popularity',
-  }).then(function(data) {
-    // console.log(data.songs);
-    urls_array = data.songs.map(song => ({title: song.title, url: song.url}))
-    // console.log(urls_array);
+  return genius.songsByArtist(artistId, {
+      per_page: 50,
+      sort: 'popularity',
+    })
+    .then(function(data) {
+      urls_array = data.songs.map(song => ({title: song.title, url: song.url}))
 
-    urls_array.forEach(function(item){
-      // console.log(item.url)
-      if (normalize(item.title) === trackNameNormalized) {
-        console.log(item.url)
-        genius.getSongLyrics(item.url).then(function(response) {
-          console.log(response)
-          return response;
-        }) 
+      for(let i = 0; i < urls_array.length ; i++) {
+        let item = urls_array[i]
+        if (normalize(item.title) === trackNameNormalized) {
+          return item.url
+        }
+      }
+
+    }).then((lyricURL) => {
+      // In case the lyric URL was not found, just return an empty string to put in the lyric list
+      if(lyricURL) {
+        console.log(lyricURL)
+        return genius.getSongLyrics(lyricURL)
+      }
+      else {
+        return ''
       }
     })
-  }).catch(function(error) {
-    console.error(error);
-  });
 }
 
 Genius.prototype.getSongLyrics = function getSongLyrics(geniusUrl) {
@@ -156,26 +134,31 @@ app.post('/', function (req, res) {
   console.log("Received POST Request")
   let mood = req.body.mood
   let parsedTracks = parseTracks(req.body.tracks)
-  let songLyrics = getLyrics(parsedTracks)
+  let promiseList = getLyrics(parsedTracks)
 
-  var options = {
-    mode: 'text',
-    scriptPath: '/Users/linahsie/mood-media/mood-backend',
-    args: []
-  }
-  for(song in songLyrics) {
-    options.args.push(songLyrics[song])
-  }
-  options.args.push(mood)
-  PythonShell.run('mood.py', options, function (err, results) {
-  if (err) throw err;
-  resUris = []
-  for(index in req.body.tracks) {
-    if(results[index] == "True") {
-      resUris.push(req.body.tracks[index].uri)
+  // Promise List is for every call to the Genius API
+  let p = Promise.all(promiseList).then(songLyrics => {
+    // console.log(songLyrics) // This prints out all of the song lyrics in a list
+    let options = {
+      mode: 'text',
+      // scriptPath: '/Users/shirdongorse/Documents/spring18/cs410/project/mood-media/mood-backend',
+      args: []
     }
-  }
-  res.send({ status: 'SUCCESS', uris: resUris})
+    // Push each of the song lyrics strings to the Python script
+    for(song in songLyrics) {
+      options.args.push(songLyrics[song])
+    }
+    options.args.push(mood)
+    PythonShell.run('mood.py', options, function (err, results) {
+    if (err) { throw err; }
+    resUris = []
+    for(index in req.body.tracks) {
+      if(results[index] == "True") {
+        resUris.push(req.body.tracks[index].uri)
+      }
+    }
+    res.send({ status: 'SUCCESS', uris: resUris})
+    })
   })
 })
 
