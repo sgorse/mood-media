@@ -96,11 +96,9 @@ Genius.prototype.getSongsByArtist = function getSongsByArtist(artistId, trackNam
           return item.url
         }
       }
-
     }).then((lyricURL) => {
       // In case the lyric URL was not found, just return an empty string to put in the lyric list
       if(lyricURL) {
-        console.log(lyricURL)
         return genius.getSongLyrics(lyricURL)
       }
       else {
@@ -141,7 +139,7 @@ app.post('/', function (req, res) {
     // console.log(songLyrics) // This prints out all of the song lyrics in a list
     let options = {
       mode: 'text',
-      // scriptPath: '/Users/shirdongorse/Documents/spring18/cs410/project/mood-media/mood-backend',
+      scriptPath: '/Users/shirdongorse/Documents/spring18/cs410/project/mood-media/mood-backend',
       args: []
     }
     // Push each of the song lyrics strings to the Python script
@@ -150,7 +148,7 @@ app.post('/', function (req, res) {
     }
     options.args.push(mood)
     PythonShell.run('mood.py', options, function (err, results) {
-    if (err) { throw err; }
+    if (err) throw err;
     resUris = []
     for(index in req.body.tracks) {
       if(results[index] == "True") {
