@@ -36,6 +36,8 @@ function parseTracks(obj) {
 // TODO :: Still not finished, need to integrate with Lina's code
 // Currently just returns a list of strings that don't contain the lyrics
 function getLyrics(tracks) {
+  console.log("Tracks Object:")
+  console.log(tracks)
   let resObj = []
   let testLyrics = "THESE ARE THE TEST LYRICS"
   for(var t in tracks) {
