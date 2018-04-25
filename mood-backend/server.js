@@ -72,7 +72,7 @@ app.post('/', function (req, res) {
 
   var options = {
     mode: 'text',
-    scriptPath: '/Users/shirdongorse/Documents/spring18/cs410/project/mood-media/mood-backend',
+    scriptPath: '/Users/sunaustin8/cs410:418/mood-media/mood-backend',
     args: []
   }
   for(song in songLyrics) {
