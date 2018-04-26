@@ -52,7 +52,7 @@ def moodMatches(mood, lyrics):
             except (nltk.corpus.reader.wordnet.WordNetError, TypeError):
                 continue
         else:
-            moodScore += 0.008
+            moodScore += 0.05
 
     ##print('hi')
     avgSimilarity = moodScore / lyrLen ##calculates average similarity of each non stop word in corpus
