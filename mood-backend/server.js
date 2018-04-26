@@ -41,6 +41,7 @@ function parseTracks(obj) {
   return resObj
 }
 
+// Necessary for creating a promise to get the lyrics of each song
 function getLyricsPromise(artist, track, genius) {
   return genius.getArtistIdByName(artist)
     .then(function(id) {
@@ -48,9 +49,8 @@ function getLyricsPromise(artist, track, genius) {
     })
 }
 
+// Loops through each item in the tracks list, and creates lyrics promise
 function getLyrics(tracks) {
-  console.log("Tracks Object:")
-  console.log(tracks)
   let resObj = []
   let promiseList = []
   const genius = new Genius(accessToken)
@@ -79,6 +79,7 @@ Genius.prototype.getArtistIdByName = function getArtistIdByName(artistName) {
     .then(songInfo => songInfo.primary_artist.id)
 }
 
+// Genius API call to get the lyrics based on the artist ID and track name
 Genius.prototype.getSongsByArtist = function getSongsByArtist(artistId, trackName) {
   const normalize = name => name.replace(/\./g, '').toLowerCase()   // regex removes dots
   const trackNameNormalized = normalize(trackName).replace(/ *\([^)]*\) */g, "") // added regex to remove parentheses (eg. "(feat drake)")
@@ -109,6 +110,7 @@ Genius.prototype.getSongsByArtist = function getSongsByArtist(artistId, trackNam
     })
 }
 
+// Using a genius lyric URL, return a string version of the lyrics
 Genius.prototype.getSongLyrics = function getSongLyrics(geniusUrl) {
   return fetch(geniusUrl, {
     method: 'GET',
@@ -120,6 +122,7 @@ Genius.prototype.getSongLyrics = function getSongLyrics(geniusUrl) {
   .then(parseSongHTML)
 }
 
+// Gets the lyrics from the htmlText returned
 function parseSongHTML(htmlText) {
   const $ = cheerio.load(htmlText)
   const lyrics = $('.lyrics').text()
@@ -127,36 +130,22 @@ function parseSongHTML(htmlText) {
   return lyrics
 }
 
-// --------------------------------------------------------------
 // POST method route
 // Used to receive the track list from the front end
+// Returns a list of URI's for songs that match the mood of the user
 app.post('/', function (req, res) {
-  console.log("Received POST Request!")
+  console.log('Received POST Request!')
+  console.log(__dirname)
   let mood = req.body.mood
   let parsedTracks = parseTracks(req.body.tracks)
   let promiseList = getLyrics(parsedTracks)
 
-  /* var options = {
-    mode: 'text',
-    scriptPath: '/Users/sunaustin8/cs410:418/mood-media/mood-backend',
-    args: []
-  }
-  for(song in songLyrics) {
-    options.args.push(songLyrics[song])
-  }
-  options.args.push(mood)
-  PythonShell.run('mood.py', options, function (err, results) {
-  if (err) throw err;
-  resUris = []
-  for(index in req.body.tracks) {
-    if(results[index] == "True") {
-      resUris.push(req.body.tracks[index].uri) */
 
-  // Promise List is for every call to the Genius API
+  // Promise List is for every call to get song lyrics
   let p = Promise.all(promiseList).then(songLyrics => {
     let options = {
       mode: 'text',
-      scriptPath: '/Users/sunaustin8/cs410:418/mood-media/mood-backend',
+      scriptPath: '/Users/shirdongorse/Documents/spring18/cs410/project/mood-media/mood-backend',
       args: []
     }
     // Push each of the song lyrics strings to the Python script

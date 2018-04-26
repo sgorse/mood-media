@@ -1,5 +1,3 @@
-# TODO :: Integrate with Austin's code
-
 import sys
 import nltk
 import string
@@ -7,6 +5,11 @@ from string import punctuation
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 from nltk.corpus import wordnet
+
+nltk.download('stopwords')
+nltk.download('punkt')
+nltk.download('averaged_perceptron_tagger')
+nltk.download('wordnet')
 
 def strip_punctuation(s):
     return ''.join(c for c in s if c not in punctuation)
