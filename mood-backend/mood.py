@@ -11,7 +11,7 @@ def moodMatches(mood, lyrics):
         print("False")
         return False
 
-    similarityThres = 0.09
+    similarityThres = 0.0000001
     moodScore = 0
     lyrics = lyrics.translate(None, string.punctuation) ##strips lyrics of punctuations
     stop_words = set(stopwords.words('english')) ##gets stopwords from nltk library
@@ -50,11 +50,9 @@ def moodMatches(mood, lyrics):
     if avgSimilarity > similarityThres: #returns whether  lyrics match mood based on how average word compares to mood
         print(avgSimilarity)
         print('true')
-        return True
     else:
         print(avgSimilarity)
         print('false')
-        return False
 
 sampleLyrics = ["Dont think Ive ever seen your kind of pretty Wandering around this midnight mad house city You got a look that says youve got it' all together So if you dont mind, I\'d like to know you better"
  , 'I took my love, I took it down Climbed a mountain and I turned around And I saw my reflection in the snow covered hills Til the landslide brought it down Oh, mirror in the sky',
