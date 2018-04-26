@@ -101,7 +101,6 @@ Genius.prototype.getSongsByArtist = function getSongsByArtist(artistId, trackNam
     }).then((lyricURL) => {
       // In case the lyric URL was not found, just return an empty string to put in the lyric list
       if(lyricURL) {
-        // console.log(lyricURL);
         return genius.getSongLyrics(lyricURL)
       }
       else {
@@ -132,7 +131,7 @@ function parseSongHTML(htmlText) {
 // POST method route
 // Used to receive the track list from the front end
 app.post('/', function (req, res) {
-  console.log("Received POST Request")
+  console.log("Received POST Request!")
   let mood = req.body.mood
   let parsedTracks = parseTracks(req.body.tracks)
   let promiseList = getLyrics(parsedTracks)
@@ -155,8 +154,6 @@ app.post('/', function (req, res) {
 
   // Promise List is for every call to the Genius API
   let p = Promise.all(promiseList).then(songLyrics => {
-    // console.log(songLyrics) // This prints out all of the song lyrics in a list
-    // console.log(promiseList.length)
     let options = {
       mode: 'text',
       scriptPath: '/Users/sunaustin8/cs410:418/mood-media/mood-backend',
@@ -169,12 +166,9 @@ app.post('/', function (req, res) {
     options.args.push(mood)
     PythonShell.run('mood.py', options, function (err, results) {
     if (err) { throw err; }
-    //console.log('errorPassed')
     resUris = []
     for(index in req.body.tracks) {
-      //console.log("iterating")
       if(results[index] == "True") {
-        //console.log("pushed!")
         resUris.push(req.body.tracks[index].uri)
       }
     }
