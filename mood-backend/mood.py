@@ -13,10 +13,10 @@ def strip_punctuation(s):
 
 def moodMatches(mood, lyrics):
     if lyrics == "":
-        print("False")
-        return False
+        ##print("False")
+        return 0.1111111111111e-17
 
-    similarityThres = 0.01
+    similarityThres = 1.502325581395e-16
     moodScore = 0.0
     ##raw_lyrics = str.maketrans('', '', string.punctuation)
     lyrics = strip_punctuation(lyrics)
@@ -52,14 +52,15 @@ def moodMatches(mood, lyrics):
             except (nltk.corpus.reader.wordnet.WordNetError, TypeError):
                 continue
         else:
-            moodScore += 0.05
+            moodScore += 1.52325581395e-16
 
-    ##print('hi')
     avgSimilarity = moodScore / lyrLen ##calculates average similarity of each non stop word in corpus
-    if avgSimilarity > similarityThres: #returns whether  lyrics match mood based on how average word compares to mood
-        print('True')
+    if avgSimilarity > 0:##similarityThres: #returns whether  lyrics match mood based on how average word compares to mood
+        return(avgSimilarity)
+        ##print('True')
     else:
-        print('False')
+        return(avgSimilarity)
+        ##print('False')
 
 
 sampleLyrics = ["Dont think Ive ever seen your kind of pretty Wandering around this midnight mad house city You got a look that says youve got it' all together So if you dont mind, I\'d like to know you better"
@@ -69,11 +70,48 @@ sampleLyrics = ["Dont think Ive ever seen your kind of pretty Wandering around t
 
 numLyrics = len(sys.argv)
 currentMood = sys.argv[numLyrics - 1]
+simVals = []
+totalSim = 0.0
+moodScale = 1
+
+if currentMood == "angry": ##scales lyrics with mood as each mood has a slightly different degree of overall relevance
+    moodScale = 1
+elif currentMood == "cheerful":
+    moodScale = 6
+elif currentMood == "energetic":
+    moodScale = 7
+elif currentMood == "peaceful":
+    moodScale = 3
+
 for lyricToDo in sys.argv:
     if lyricToDo != sys.argv[numLyrics - 1]:
-        moodMatches(currentMood, lyricToDo)
+        simVals.append(moodMatches(currentMood, lyricToDo) * moodScale)
+
+for sim in simVals:
+    totalSim += sim
+    tempSim = str(sim * 10e25)
+    print(tempSim)
+    digit = int(tempSim[2])
+    if digit >= 5:
+        print("True")
+    else:
+        print("False")
 
 '''
+sortedSimVal = sorted(simVals)
+pivotVal = sortedSimVal[8]
+##print(sortedSimVal)
+##print("Pivot:")
+##print(pivotVal)
+totalAvgSim = totalSim / (numLyrics - 1)
+for lyricToDo in sys.argv:
+    if lyricToDo != sys.argv[numLyrics - 1]:
+        if moodMatches(currentMood, lyricToDo) >= pivotVal:
+            valB = 0
+            ##print("True")
+        ##else:
+            ##print("False")
+
 numLyrics = len(sampleLyrics)
 currentMood = sampleLyrics[numLyrics - 1]
 for lyricToDo in sampleLyrics:

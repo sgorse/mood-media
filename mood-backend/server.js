@@ -129,7 +129,7 @@ function parseSongHTML(htmlText) {
 // POST method route
 // Used to receive the track list from the front end
 app.post('/', function (req, res) {
-  console.log("Received POST Request!")
+  console.log("Received POST Request.")
   let mood = req.body.mood
   let parsedTracks = parseTracks(req.body.tracks)
   let promiseList = getLyrics(parsedTracks)
@@ -158,11 +158,13 @@ app.post('/', function (req, res) {
       args: []
     }
     // Push each of the song lyrics strings to the Python script
+    //console.log(songLyrics)
     for(song in songLyrics) {
       options.args.push(songLyrics[song])
     }
     options.args.push(mood)
     PythonShell.run('mood.py', options, function (err, results) {
+    console.log(results)
     if (err) { throw err; }
     resUris = []
     for(index in req.body.tracks) {

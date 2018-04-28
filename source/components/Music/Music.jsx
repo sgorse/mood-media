@@ -134,8 +134,8 @@ let moods = [
     value: 'cheerful',
   },
   {
-    text: 'energized',
-    value: 'energized',
+    text: 'energetic',
+    value: 'energetic',
   },
   {
     text: 'peaceful',
