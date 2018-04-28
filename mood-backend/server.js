@@ -134,7 +134,7 @@ function parseSongHTML(htmlText) {
 // Used to receive the track list from the front end
 // Returns a list of URI's for songs that match the mood of the user
 app.post('/', function (req, res) {
-  console.log('Received POST Request!')
+  console.log('Received POST Request.')
   let mood = req.body.mood
   let parsedTracks = parseTracks(req.body.tracks)
   let promiseList = getLyrics(parsedTracks)
@@ -144,7 +144,7 @@ app.post('/', function (req, res) {
   let p = Promise.all(promiseList).then(songLyrics => {
     let options = {
       mode: 'text',
-      scriptPath: '/Users/shirdongorse/Documents/spring18/cs410/project/mood-media/mood-backend',
+      scriptPath: '/Users/sunaustin8/cs410:418/mood-media/mood-backend',
       args: []
     }
     // Push each of the song lyrics strings to the Python script
@@ -154,7 +154,6 @@ app.post('/', function (req, res) {
     }
     options.args.push(mood)
     PythonShell.run('mood.py', options, function (err, results) {
-    console.log(results)
     if (err) { throw err; }
     resUris = []
     for(index in req.body.tracks) {

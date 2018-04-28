@@ -82,7 +82,7 @@ if currentMood == "angry": ##scales lyrics with mood as each mood has a slightly
 elif currentMood == "cheerful":
     moodScale = 6
 elif currentMood == "energetic":
-    moodScale = 7
+    moodScale = 4
 elif currentMood == "peaceful":
     moodScale = 3
 
