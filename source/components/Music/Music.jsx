@@ -5,7 +5,7 @@ import _ from 'lodash'
 import styles from './Music.scss'
 import Spotify from 'spotify-web-api-js'
 import SpotifyPlayer from 'react-spotify-player';
-var axios = require('axios');
+let axios = require('axios');
 
 const spotifyWebApi = new Spotify();
 // size may also be a plain string using the presets 'large' or 'compact'
@@ -35,9 +35,9 @@ class Music extends Component {
       document.body.style.backgroundColor = '#282828'
     }
 
-    getTracks(genre) {
+    getTracks() {
       let currentComponent = this // Not sure why this is needed
-      let url = 'http://localhost:5000/'
+      let url = 'http://localhost:5000/music'
       spotifyWebApi.searchTracks('genre:'+this.state.chosenGenre)
       .then(data => axios.post(url, {tracks: data.tracks.items, mood: currentComponent.state.chosenMood}))
       .then(function(res) {
@@ -45,7 +45,9 @@ class Music extends Component {
             tracks: res.data.uris,
         })
       }, function(err) {
-        console.error(err)
+        alert('Access Token Expired')
+        localStorage.clear()
+        window.location.reload()
       })
     }
 
@@ -86,7 +88,7 @@ class Music extends Component {
             <div className="searchElement">
                 <Dropdown className="searchElement" placeholder='Select your mood' fluid selection options={moods} onChange={(e, { value }) => this.setMood(value)}></Dropdown>
             </div>
-            <Button className="searchElement" id="searchButton" onClick={() => this.getTracks('rock')}>
+            <Button className="searchElement" id="searchButton" onClick={() => this.getTracks()}>
               Search
             </Button>
             <div>{tracks}</div>
@@ -98,53 +100,28 @@ class Music extends Component {
         this.setState({
             chosenGenre: val,
         });
-        console.log(val)
     }
 
     setMood(val) {
         this.setState({
             chosenMood: val,
         });
-        console.log(this.state.chosenMood)
     }
 }
 
-let genres = [
-  {
-    text: 'country',
-    value: 'country',
-  },
-  {
-    text: 'electronic',
-    value: 'electronic',
-  },
-  {
-    text: 'pop',
-    value: 'pop',
-  },
-  {
-    text: 'rap',
-    value: 'rap',
-  }
+const genres = [
+  { text: 'country', value: 'country'},
+  { text: 'electronic', value: 'electronic'},
+  { text: 'pop', value: 'pop'},
+  { text: 'rap', value: 'rap'},
+  { text: 'Drama', value: 'Drama'}
 ]
 
 let moods = [
-  {
-    text: 'angry',
-    value: 'angry',
-  },
-  {
-    text: 'cheerful',
-    value: 'cheerful',
-  },
-  {
-    text: 'energetic',
-    value: 'energetic',
-  },
-  {
-    text: 'peaceful',
-    value: 'peaceful',
-  }
+  { text: 'angry', value: 'angry'},
+  { text: 'energetic', value: 'energetic'},
+  { text: 'happy', value: 'happy'},
+  { text: 'peaceful', value: 'peaceful'}
 ]
 
 export default Music
