@@ -94,7 +94,7 @@ for sim in simVals:
     totalSim += sim
     tempSim = str(sim * 10e25)
     digit = int(tempSim[2])
-    if digit >= 5:
+    if digit >= 5.234504:
         print("True")
     else:
         print("False")
