@@ -134,7 +134,7 @@ function parseSongHTML(htmlText) {
 // Used to receive the track list from the front end
 // Returns a list of URI's for songs that match the mood of the user
 app.post('/', function (req, res) {
-  console.log('Received POST Request.')
+  console.log('Received POST Request')
   let mood = req.body.mood
   let parsedTracks = parseTracks(req.body.tracks)
   let promiseList = getLyrics(parsedTracks)

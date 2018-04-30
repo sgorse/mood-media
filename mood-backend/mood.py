@@ -30,11 +30,9 @@ def moodMatches(mood, lyrics):
 
     filtered_lyrics = [w for w in lyric_tokens if not w in stop_words] ##removes stopwords from lyrics
     lyrLen = len(filtered_lyrics) ##number of non-stop words lyrics
-    ##lyric_tag = nltk.pos_tag(filtered_lyrics)
 
     for word in filtered_lyrics:
         word_tag = nltk.tag.pos_tag([word]) ##tags current word as part of speech
-        #print(word_tag[0][1])
         if word_tag[0][1] == 'NN' or word_tag[0][1] == 'JJ' or word_tag[0][1] == 'VB':
             if word_tag[0][1] == 'NN':
                 wordTemp = word + ".n.01"
@@ -80,7 +78,7 @@ moodScale = 1
 if currentMood == "angry": ##scales lyrics with mood as each mood has a slightly different degree of overall relevance
     moodScale = 1
 elif currentMood == "cheerful":
-    moodScale = 6
+    moodScale = 9
 elif currentMood == "energetic":
     moodScale = 4
 elif currentMood == "peaceful":
