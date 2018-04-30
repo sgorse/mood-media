@@ -98,14 +98,12 @@ class Music extends Component {
         this.setState({
             chosenGenre: val,
         });
-        console.log(val)
     }
 
     setMood(val) {
         this.setState({
             chosenMood: val,
         });
-        console.log(this.state.chosenMood)
     }
 }
 

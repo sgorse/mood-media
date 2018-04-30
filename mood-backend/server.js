@@ -149,7 +149,6 @@ app.post('/music', function (req, res) {
       args: []
     }
     // Push each of the song lyrics strings to the Python script
-    //console.log(songLyrics)
     for(song in songLyrics) {
       options.args.push(songLyrics[song])
     }
