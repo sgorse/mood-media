@@ -133,8 +133,8 @@ function parseSongHTML(htmlText) {
 // POST method route
 // Used to receive the track list from the front end
 // Returns a list of URI's for songs that match the mood of the user
-app.post('/', function (req, res) {
-  console.log('Received POST Request')
+app.post('/music', function (req, res) {
+  console.log('Received Music POST Request')
   let mood = req.body.mood
   let parsedTracks = parseTracks(req.body.tracks)
   let promiseList = getLyrics(parsedTracks)
@@ -157,7 +157,6 @@ app.post('/', function (req, res) {
     PythonShell.run('mood.py', options, function (err, results) {
     if (err) { throw err; }
     resUris = []
-    console.log(results)
     for(index in req.body.tracks) {
       if(results[index] == "True") {
         resUris.push(req.body.tracks[index].uri)
@@ -165,6 +164,26 @@ app.post('/', function (req, res) {
     }
     res.send({ status: 'SUCCESS', uris: resUris})
     })
+  })
+})
+
+app.post('/movies', function (req, res) {
+  console.log('Received Movie POST Request')
+
+  let options = {
+    mode: 'text',
+    scriptPath: __dirname,
+    args: []
+  }
+  // Push each of the overview strings to the Python script
+  // Also push the mood these strings need to match
+  for(overview in req.body.overviews) {
+    options.args.push(req.body.overviews[overview])
+  }
+  options.args.push(req.body.mood)
+  PythonShell.run('mood.py', options, function (err, results) {
+    if (err) { throw err; }
+    res.send({ status: 'SUCCESS', movie_bools: results})
   })
 })
 

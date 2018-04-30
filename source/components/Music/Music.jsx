@@ -5,7 +5,7 @@ import _ from 'lodash'
 import styles from './Music.scss'
 import Spotify from 'spotify-web-api-js'
 import SpotifyPlayer from 'react-spotify-player';
-var axios = require('axios');
+let axios = require('axios');
 
 const spotifyWebApi = new Spotify();
 // size may also be a plain string using the presets 'large' or 'compact'
@@ -35,9 +35,9 @@ class Music extends Component {
       document.body.style.backgroundColor = '#282828'
     }
 
-    getTracks(genre) {
+    getTracks() {
       let currentComponent = this // Not sure why this is needed
-      let url = 'http://localhost:5000/'
+      let url = 'http://localhost:5000/music'
       spotifyWebApi.searchTracks('genre:'+this.state.chosenGenre)
       .then(data => axios.post(url, {tracks: data.tracks.items, mood: currentComponent.state.chosenMood}))
       .then(function(res) {
@@ -86,7 +86,7 @@ class Music extends Component {
             <div className="searchElement">
                 <Dropdown className="searchElement" placeholder='Select your mood' fluid selection options={moods} onChange={(e, { value }) => this.setMood(value)}></Dropdown>
             </div>
-            <Button className="searchElement" id="searchButton" onClick={() => this.getTracks('rock')}>
+            <Button className="searchElement" id="searchButton" onClick={() => this.getTracks()}>
               Search
             </Button>
             <div>{tracks}</div>
