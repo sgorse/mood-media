@@ -17,6 +17,10 @@ class Movies extends Component {
     }
   }
 
+  componentDidMount() {
+    document.body.style.backgroundColor = 'blue'
+  }
+
   setGenre(val) {
     this.setState({
       chosenGenre: val,

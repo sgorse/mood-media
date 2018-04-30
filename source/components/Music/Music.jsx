@@ -30,6 +30,10 @@ class Music extends Component {
       spotifyWebApi.setAccessToken(localStorage.getItem("access_token"))
 
     }
+    // Used to set the background color once the page loads
+    componentDidMount() {
+      document.body.style.backgroundColor = '#282828'
+    }
 
     getTracks(genre) {
       let currentComponent = this // Not sure why this is needed
