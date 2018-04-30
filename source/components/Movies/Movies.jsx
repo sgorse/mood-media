@@ -17,6 +17,11 @@ class Movies extends Component {
     }
   }
 
+  // Sets the background color to white once the page is loaded
+  componentDidMount() {
+    document.body.style.backgroundColor = '#FFFFFF'
+  }
+
   setGenre(val) {
     this.setState({
       chosenGenre: val,
