@@ -84,14 +84,15 @@ elif currentMood == "energetic":
 elif currentMood == "peaceful":
     moodScale = 3
 
+
 for lyricToDo in sys.argv:
-    if lyricToDo != sys.argv[numLyrics - 1]:
+    if lyricToDo != sys.argv[numLyrics - 1] and lyricToDo != sys.argv[0]:
         simVals.append(moodMatches(currentMood, lyricToDo) * moodScale)
 
+#print(len(simVals))
 for sim in simVals:
     totalSim += sim
     tempSim = str(sim * 10e25)
-    # print(tempSim)
     digit = int(tempSim[2])
     if digit >= 5:
         print("True")

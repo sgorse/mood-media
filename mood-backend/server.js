@@ -156,7 +156,6 @@ app.post('/', function (req, res) {
     PythonShell.run('mood.py', options, function (err, results) {
     if (err) { throw err; }
     resUris = []
-    console.log(results)
     for(index in req.body.tracks) {
       if(results[index] == "True") {
         resUris.push(req.body.tracks[index].uri)
