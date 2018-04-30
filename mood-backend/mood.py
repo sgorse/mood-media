@@ -6,10 +6,10 @@ from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 from nltk.corpus import wordnet
 
-nltk.download('stopwords')
-nltk.download('punkt')
-nltk.download('averaged_perceptron_tagger')
-nltk.download('wordnet')
+# nltk.download('stopwords')
+# nltk.download('punkt')
+# nltk.download('averaged_perceptron_tagger')
+# nltk.download('wordnet')
 
 def strip_punctuation(s):
     return ''.join(c for c in s if c not in punctuation)
@@ -93,7 +93,7 @@ for lyricToDo in sys.argv:
 for sim in simVals:
     totalSim += sim
     tempSim = str(sim * 10e25)
-    print(tempSim)
+    # print(tempSim)
     digit = int(tempSim[2])
     if digit >= 5:
         print("True")
