@@ -142,9 +142,10 @@ app.post('/', function (req, res) {
 
   // Promise List is for every call to get song lyrics
   let p = Promise.all(promiseList).then(songLyrics => {
+
     let options = {
       mode: 'text',
-      scriptPath: '/Users/sunaustin8/cs410:418/mood-media/mood-backend',
+      scriptPath: __dirname,
       args: []
     }
     // Push each of the song lyrics strings to the Python script
