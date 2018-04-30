@@ -45,7 +45,9 @@ class Music extends Component {
             tracks: res.data.uris,
         })
       }, function(err) {
-        console.error(err)
+        alert('Access Token Expired')
+        localStorage.clear()
+        window.location.reload()
       })
     }
 
@@ -107,42 +109,19 @@ class Music extends Component {
     }
 }
 
-let genres = [
-  {
-    text: 'country',
-    value: 'country',
-  },
-  {
-    text: 'electronic',
-    value: 'electronic',
-  },
-  {
-    text: 'pop',
-    value: 'pop',
-  },
-  {
-    text: 'rap',
-    value: 'rap',
-  }
+const genres = [
+  { text: 'country', value: 'country'},
+  { text: 'electronic', value: 'electronic'},
+  { text: 'pop', value: 'pop'},
+  { text: 'rap', value: 'rap'},
+  { text: 'Drama', value: 'Drama'}
 ]
 
 let moods = [
-  {
-    text: 'angry',
-    value: 'angry',
-  },
-  {
-    text: 'cheerful',
-    value: 'cheerful',
-  },
-  {
-    text: 'energetic',
-    value: 'energetic',
-  },
-  {
-    text: 'peaceful',
-    value: 'peaceful',
-  }
+  { text: 'angry', value: 'angry'},
+  { text: 'energetic', value: 'energetic'},
+  { text: 'happy', value: 'happy'},
+  { text: 'peaceful', value: 'peaceful'}
 ]
 
 export default Music

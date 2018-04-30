@@ -23,24 +23,31 @@ class Movies extends Component {
     document.body.style.backgroundColor = '#FFFFFF'
   }
 
+  // Add the current genre to the state when it is chosen in the dropdown
   setGenre(val) {
     this.setState({
       chosenGenre: val,
     })
   }
 
+  // Add the current mood to the state when it is chosen in the dropdown
   setMood(val) {
     this.setState({
       chosenMood: val,
     })
   }
 
+  // Uses the information given in the dropdown.
+  // Gathers movies from themoviedb API.
+  // Sends the overviews of these movies to the backend.
+  // Receives a list of booleans to decide which movies to show the user
   getMovies() { 
     let currentGenreID = genreID[this.state.chosenGenre]
-    let currentComponent = this // Not sure why this is needed
+    let currentComponent = this 
     let post_url = 'http://localhost:5000/movies'
     var url = 'https://api.themoviedb.org/3/discover/movie?api_key=68a5226494252d022b94bd1db36218ed&with_genres='+currentGenreID
     this.state.movie_bools = []
+
     Request.get(url).then((response) => {
       let overviews = []
       this.setState({
@@ -50,10 +57,9 @@ class Movies extends Component {
         overviews.push(element.overview)
         this.state.movie_bools.push('False')
       })
-      return overviews })
-    .then(overviews => axios.post(post_url, {overviews: overviews, mood: currentComponent.state.chosenMood}))
-    .then((res) => {
-      console.log(res.data.movie_bools)
+      return overviews 
+    }).then(overviews => axios.post(post_url, {overviews: overviews, mood: currentComponent.state.chosenMood})
+    ).then((res) => {
       this.setState({
         movie_bools: res.data.movie_bools
       })
