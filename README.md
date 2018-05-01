@@ -25,4 +25,20 @@ Steps to test the app locally:
   5. `nltk.download('punkt')`
   6. `nltk.download('averaged_perceptron_tagger')`
   7. `nltk.download('wordnet')`
+  
+  ## Music App
+  ### Implementation:
+  1. Gathers songs from specific genre using Spotify API.
+  2. Gets the lyrics for these songs from the Genius API.
+  3. Python script parses song lyrics, and matches them with the user’s chosen mood.
+  4. Songs that match the user’s mood are shown to them on the front end.
+  
+  ## Movies App
+  ### Implementation:
+  1. A list of movies matching the user’s genre are received from The Movie DB API.
+  2. The movie overviews are parsed out and sent to the backend.
+  3. The Python script is run on the movie overview to see if the movie matches the user’s mood.
+  4. The movies matching the user’s mood are shown to the user.
+
+
 
