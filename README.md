@@ -19,8 +19,8 @@ Steps to test the app locally:
     3. Go to localhost:8080 on your browser
   ### Run the Python script in a new terminal:  
   1. From the mood-media directory, run `cd mood-backend`
-  2. Run `Python`
-  3. `import nltk`  
+  2. (For Mac/Unix users) Install NLTK: run `sudo pip install -U nltk`
+  3. Run `python` then type `import nltk` 
   4. `nltk.download('stopwords')`
   5. `nltk.download('punkt')`
   6. `nltk.download('averaged_perceptron_tagger')`
