@@ -6,21 +6,13 @@ from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 from nltk.corpus import wordnet
 
-# nltk.download('stopwords')
-# nltk.download('punkt')
-# nltk.download('averaged_perceptron_tagger')
-# nltk.download('wordnet')
-
-## parameter s - string to strip punctuation of
-## method to strip text of punctuation
-## returns string s stripped of punctuation
 def strip_punctuation(s):
     return ''.join(c for c in s if c not in punctuation)
 
 ## parameter mood - string mood to be compared
 ## parameter lyrics - string lyrics to be compared
 ## method to calculate similarity between a mood and a text body excluding stopwords
-## returns 
+## returns
 def moodMatches(mood, lyrics):
     if lyrics == "":
         return 0.1111111111111e-17

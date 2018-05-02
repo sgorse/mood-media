@@ -113,8 +113,7 @@ const genres = [
   { text: 'country', value: 'country'},
   { text: 'electronic', value: 'electronic'},
   { text: 'pop', value: 'pop'},
-  { text: 'rap', value: 'rap'},
-  { text: 'Drama', value: 'Drama'}
+  { text: 'rap', value: 'rap'}
 ]
 
 let moods = [
