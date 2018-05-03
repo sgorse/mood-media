@@ -10,8 +10,6 @@ var cheerio = require('cheerio');
 var fetch = require("node-fetch");
 let globalLyrics = []
 
-//import Spotify from 'spotify-web-api-js'
-
 const accessToken = '5MQ-WVXQ1eYFdr5DSVIfntYVk5o-6GlCRdtfMwvUEP0y7Hm4G2lfYy7AjFio3q83'
 const genius = new Genius(accessToken)
 
@@ -32,6 +30,7 @@ function parseTracks(obj) {
     songObj = obj[track]
     parsedObj['name'] = songObj.name
     parsedObj['artists'] = []
+
     // Get a list all of the artists for the song
     for(var artist in songObj.artists) {
       parsedObj['artists'].push(songObj.artists[artist].name)
@@ -79,20 +78,24 @@ Genius.prototype.getArtistIdByName = function getArtistIdByName(artistName) {
     .then(songInfo => songInfo.primary_artist.id)
 }
 
-// Genius API call to get the lyrics based on the artist ID and track name
+// Genius API call to get the lyrics based on the artist ID (to get the top 50 songs of the artist) and track name
 Genius.prototype.getSongsByArtist = function getSongsByArtist(artistId, trackName) {
   const normalize = name => name.replace(/\./g, '').toLowerCase()   // regex removes dots
   const trackNameNormalized = normalize(trackName).replace(/ *\([^)]*\) */g, "") // added regex to remove parentheses (eg. "(feat drake)")
 
   var urls_array = []
   const genius = new Genius(accessToken)
+  // Genius API only allows us to get maximum of 50 items in one time.
+  // So here we're getting top 50 songs of the artist based on popularity.
   return genius.songsByArtist(artistId, {
       per_page: 50,
       sort: 'popularity',
     })
     .then(function(data) {
+      // For each songs, push it to the urls_array with song title and lyrics url
       urls_array = data.songs.map(song => ({title: song.title, url: song.url}))
 
+      // Finding the object with the same track name in the array and return it.
       for(let i = 0; i < urls_array.length ; i++) {
         let item = urls_array[i]
         if (normalize(item.title) === trackNameNormalized) {
@@ -138,7 +141,6 @@ app.post('/music', function (req, res) {
   let mood = req.body.mood
   let parsedTracks = parseTracks(req.body.tracks)
   let promiseList = getLyrics(parsedTracks)
-
 
   // Promise List is for every call to get song lyrics
   let p = Promise.all(promiseList).then(songLyrics => {
