@@ -27,7 +27,9 @@ Steps to test the app locally:
   3. Go to localhost:8080 on your browser
   ### Run the Python script in a new terminal:  
   1. From the mood-media directory, run `cd mood-backend`
-  2. (For Mac/Unix users) Install NLTK: run `sudo pip install -U nltk`
+  2. Install NLTK:  
+      a. For Mac/Unix users: run `sudo pip install -U nltk`  
+      b. Others: https://www.nltk.org/install.html  
   3. Run `python` then type `import nltk` 
   4. `nltk.download('stopwords')`
   5. `nltk.download('punkt')`
@@ -48,5 +50,7 @@ Steps to test the app locally:
   3. The Python script is run on the movie overview to see if the movie matches the user’s mood.
   4. The movies matching the user’s mood are shown to the user.
 
-
+  ### Technologies used:
+  1. Front-end: ReactJS
+  2. Back-end: Node.JS & Python
 
