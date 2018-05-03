@@ -9,17 +9,17 @@ from nltk.corpus import wordnet
 def strip_punctuation(s):
     return ''.join(c for c in s if c not in punctuation)
 
+## parameter mood - string mood to be compared
+## parameter lyrics - string lyrics to be compared
+## method to calculate similarity between a mood and a text body excluding stopwords
+## returns
 def moodMatches(mood, lyrics):
     if lyrics == "":
-        ##print("False")
         return 0.1111111111111e-17
 
     similarityThres = 1.502325581395e-16
     moodScore = 0.0
-    ##raw_lyrics = str.maketrans('', '', string.punctuation)
     lyrics = strip_punctuation(lyrics)
-    ##lyrics.translate(raw_lyrics)
-    ##lyrics = lyrics.translate(None, string.punctuation) ##strips lyrics of punctuations
     stop_words = set(stopwords.words('english')) ##gets stopwords from nltk library
     lyric_tokens = word_tokenize(lyrics) ##tokenizes lyrics into list to parse for stopwords
 
@@ -53,16 +53,8 @@ def moodMatches(mood, lyrics):
     avgSimilarity = moodScore / lyrLen ##calculates average similarity of each non stop word in corpus
     if avgSimilarity > 0:##similarityThres: #returns whether  lyrics match mood based on how average word compares to mood
         return(avgSimilarity)
-        ##print('True')
     else:
         return(avgSimilarity)
-        ##print('False')
-
-
-sampleLyrics = ["Dont think Ive ever seen your kind of pretty Wandering around this midnight mad house city You got a look that says youve got it' all together So if you dont mind, I\'d like to know you better"
- , 'I took my love, I took it down Climbed a mountain and I turned around And I saw my reflection in the snow covered hills Til the landslide brought it down Oh, mirror in the sky',
- "Pages between us Written with no end So many words we're not saying Don't wanna wait 'til it's gone You make me strong", 'happiness']
-
 
 numLyrics = len(sys.argv)
 currentMood = sys.argv[numLyrics - 1]
@@ -70,7 +62,7 @@ simVals = []
 totalSim = 0.0
 moodScale = 1
 
-if currentMood == "angry": ##scales lyrics with mood as each mood has a slightly different degree of overall relevance
+if currentMood == "angry": ##scales text with mood as each mood has a slightly different degree of overall relevance
     moodScale = 1
 elif currentMood == "cheerful":
     moodScale = 9
@@ -80,38 +72,15 @@ elif currentMood == "peaceful":
     moodScale = 3
 
 
-for lyricToDo in sys.argv:
+for lyricToDo in sys.argv: ##creates list of similarity scores excluding some default scripts and the mood
     if lyricToDo != sys.argv[numLyrics - 1] and lyricToDo != sys.argv[0]:
         simVals.append(moodMatches(currentMood, lyricToDo) * moodScale)
 
-#print(len(simVals))
-for sim in simVals:
+for sim in simVals: ##chooses to display a text if it's similarity surpassses a parameter threshold
     totalSim += sim
     tempSim = str(sim * 10e25)
     digit = int(tempSim[2])
-    if digit >= 5:
+    if digit >= 5.234504:
         print("True")
     else:
         print("False")
-
-'''
-sortedSimVal = sorted(simVals)
-pivotVal = sortedSimVal[8]
-##print(sortedSimVal)
-##print("Pivot:")
-##print(pivotVal)
-totalAvgSim = totalSim / (numLyrics - 1)
-for lyricToDo in sys.argv:
-    if lyricToDo != sys.argv[numLyrics - 1]:
-        if moodMatches(currentMood, lyricToDo) >= pivotVal:
-            valB = 0
-            ##print("True")
-        ##else:
-            ##print("False")
-
-numLyrics = len(sampleLyrics)
-currentMood = sampleLyrics[numLyrics - 1]
-for lyricToDo in sampleLyrics:
-    if lyricToDo != sampleLyrics[numLyrics - 1]:
-        moodMatches(currentMood, lyricToDo)
-        '''
