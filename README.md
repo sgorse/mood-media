@@ -52,5 +52,15 @@ Steps to test the app locally:
 
   ### Technologies used:
   1. Front-end: ReactJS
-  2. Back-end: Node.JS & Python
+  2. Back-end: Node.JS & Python  
+  
+  ### APIs and library used:
+  * Spotify API: https://beta.developer.spotify.com/documentation/web-api/  
+  * Genius API: https://docs.genius.com/  
+  * The Movie DB API: https://www.themoviedb.org/documentation/api  
+  * NLTK library in Python: https://www.nltk.org/  
 
+  ## Contribution
+  Austin Sun:  
+  Lina Sie:  
+  Shirdon Gorse:  
