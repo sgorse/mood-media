@@ -1,6 +1,14 @@
 # CS 410 Project: Mood Media
 Mood Media is a web application that recommends songs and movies for users to consume based on their mood.
 
+## Environment
+
+The following environment was used for testing:
+  1. OS: Mac OS High Sierra
+  2. Node JS : Version 9 or higher
+  3. Npm : Version 5.6 or higher
+  4. Python : 2.7.x
+
 ## Setup
 
 Steps to test the app locally:  
