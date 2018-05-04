@@ -61,10 +61,10 @@ Steps to test the app locally:
   * NLTK library in Python: https://www.nltk.org/  
 
   ## Contribution
-  Austin Sun:  
-  - Implemented text-similarity algorithm in the backend and returned script to frontend.  
-  - Contributed in meshing the frontend and backend.  
-  Lina Sie:  
-  - Implemented the functions to get the lyrics from Genius API using Node JS.  
-  Shirdon Gorse:  
-  - Implemented the front end (ReactJS), and the backend portions that communicate with the front end (Node JS).
+  * Austin Sun:  
+    * Implemented text-similarity algorithm in the backend and returned script to frontend.  
+    * Contributed in meshing the frontend and backend.  
+  * Lina Sie:  
+    * Implemented the functions to get the lyrics from Genius API using Node JS.  
+  * Shirdon Gorse:  
+    * Implemented the front end (ReactJS), and the backend portions that communicate with the front end (Node JS).
