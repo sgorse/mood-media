@@ -19,7 +19,7 @@
     "deasync": "^0.1.12",
     "express": "^4.16.3",
     "genius-api": "^0.4.1",
-    "jquery": "^3.3.1",
+    "jquery": "^3.5.0",
     "node-fetch": "^2.1.2",
     "python-shell": "^0.5.0",
     "spotify-web-api-js": "^0.23.0",
